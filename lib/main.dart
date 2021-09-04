@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        brightness: Brightness.dark,
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
@@ -28,23 +29,38 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var _heroProfileCards = [
+  var _heroProfiles = [
     ComicHero(
-        name: 'Spider Man',
-        realName: 'Peter Parker',
-        profileImgUrl: '005smp_ons_crd_02.jpg'),
+      name: 'Spider Man',
+      realName: 'Peter Parker',
+      profileImgUrl: '005smp_ons_crd_02.jpg',
+    ),
     ComicHero(
-        name: 'Iron Man',
-        realName: 'Tony Stark',
-        profileImgUrl: '002irm_ons_crd_03.jpg'),
+      name: 'Iron Man',
+      realName: 'Tony Stark',
+      profileImgUrl: '002irm_ons_crd_03.jpg',
+    ),
+    ComicHero(
+      name: 'Spider Man2',
+      realName: 'Peter Parker',
+      profileImgUrl: '005smp_ons_crd_02.jpg',
+    ),
+    ComicHero(
+      name: 'Iron Man2',
+      realName: 'Tony Stark',
+      profileImgUrl: '002irm_ons_crd_03.jpg',
+    ),
+    ComicHero(
+      name: 'Spider Man3',
+      realName: 'Peter Parker',
+      profileImgUrl: '005smp_ons_crd_02.jpg',
+    ),
+    ComicHero(
+      name: 'Iron Man3',
+      realName: 'Tony Stark',
+      profileImgUrl: '002irm_ons_crd_03.jpg',
+    ),
   ];
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,15 +69,16 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Container(
-        child: GridView.builder(
-            padding: const EdgeInsets.all(10),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-            ),
-            itemCount: _heroProfileCards.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ComicHeroProfileCard(myHero: _heroProfileCards[index]);
-            }),
+        child: GridView.count(
+          crossAxisCount: 2,
+          childAspectRatio: 4 / 7,
+          padding: const EdgeInsets.all(5),
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          children: _heroProfiles
+              .map((item) => ComicHeroProfileCard(myHero: item))
+              .toList(),
+        ),
       ),
     );
   }
@@ -82,29 +99,47 @@ class ComicHero {
 
 class ComicHeroProfileCard extends Container {
   final ComicHero myHero;
+  final BorderRadius _cornerRadius = BorderRadius.circular(10.0);
 
   ComicHeroProfileCard({required this.myHero});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.pink,
+    return Card(
+      // color: Colors.pinkAccent,
+      shape: RoundedRectangleBorder(borderRadius: _cornerRadius),
+      elevation: 0,
       child: Column(
-          children: [
-           Container(
-             clipBehavior: Clip.hardEdge,
-            child: myHero.profileImgUrl != ''
-                ? Image.network(
-                    _imageUrlPrefix + myHero.profileImgUrl,
-                    // height: 150,                    
-                  )
-                : Icon(
-                    Icons.bug_report,
-                    size: 24,
-                  ),
-           ),
-            Text('${myHero.name} - ${myHero.realName}'),
-          ],
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          AspectRatio(
+            aspectRatio: 7 / 10,
+            child: ClipRRect(
+              borderRadius: _cornerRadius,
+              child: Image.network(
+                _imageUrlPrefix + myHero.profileImgUrl,
+                // height: 200,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  myHero.name,
+                  style: TextStyle(fontSize: 16.0),
+                ),
+                SizedBox(height: 6),
+                Text(
+                  myHero.realName,
+                  style: TextStyle(fontSize: 14.0),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
