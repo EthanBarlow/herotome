@@ -97,49 +97,82 @@ class ComicHero {
   // late String _name;
 }
 
-class ComicHeroProfileCard extends Container {
+class ComicHeroProfileCard extends StatefulWidget {
   final ComicHero myHero;
-  final BorderRadius _cornerRadius = BorderRadius.circular(10.0);
 
   ComicHeroProfileCard({required this.myHero});
 
   @override
+  _ComicHeroProfileCardState createState() => _ComicHeroProfileCardState();
+}
+
+class _ComicHeroProfileCardState extends State<ComicHeroProfileCard> {
+  final BorderRadius _cornerRadius = BorderRadius.circular(10.0);
+  bool _pressed = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Card(
-      // color: Colors.pinkAccent,
-      shape: RoundedRectangleBorder(borderRadius: _cornerRadius),
-      elevation: 0,
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          AspectRatio(
-            aspectRatio: 7 / 10,
-            child: ClipRRect(
-              borderRadius: _cornerRadius,
-              child: Image.network(
-                _imageUrlPrefix + myHero.profileImgUrl,
-                // height: 200,
-                fit: BoxFit.cover,
+    return GestureDetector(
+      // onTap: () {
+      //   setState(() {
+      //     _pressed = true;
+      //   });
+      //   print('onTap - InkWell');
+      // },
+      onTapDown: (TapDownDetails details) {
+        setState(() {
+          _pressed = true;
+        });
+        print('onTapDown - InkWell');
+      },
+      onTapUp: (TapUpDetails details) {
+        Future.delayed(Duration(milliseconds: 300), () {
+          setState(() {
+            _pressed = false;
+          });
+        });
+        print('onTapUp - InkWell');
+      },
+      child: AnimatedOpacity(
+        opacity: _pressed ? 0.5 : 1.0,
+        // opacity: 1.0,
+        duration: Duration(milliseconds: 200),
+        child: Card(
+          shape: RoundedRectangleBorder(borderRadius: _cornerRadius),
+          elevation: 0,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              AspectRatio(
+                aspectRatio: 7 / 10,
+                child: ClipRRect(
+                  borderRadius: _cornerRadius,
+                  child: Image.network(
+                    _imageUrlPrefix + widget.myHero.profileImgUrl,
+                    // height: 200,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-            ),
-          ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  myHero.name,
-                  style: TextStyle(fontSize: 16.0),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.myHero.name,
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                    SizedBox(height: 6),
+                    Text(
+                      widget.myHero.realName,
+                      style: TextStyle(fontSize: 14.0),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 6),
-                Text(
-                  myHero.realName,
-                  style: TextStyle(fontSize: 14.0),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
