@@ -1,14 +1,76 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:herotome/ComicHero.dart';
 import 'package:herotome/DetailsScreen.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(ProviderScope(child: MyApp()));
 }
+
+final heroListProvider = Provider((ref) => [
+      ComicHero(
+        name: 'Spider Man',
+        realName: 'Peter Parker',
+        profileImgUrl: '005smp_ons_crd_02.jpg',
+        description:
+            'Bitten by a radioactive spider, Peter Parker’s arachnid abilities give him amazing powers he uses to help others, while his personal life continues to offer plenty of obstacles.',
+        link: '/characters/spider-man-peter-parker',
+        context: 'live_action',
+      ),
+      ComicHero(
+        name: 'Iron Man',
+        realName: 'Tony Stark',
+        profileImgUrl: '002irm_ons_crd_03.jpg',
+        description:
+            'Genius. Billionaire. Philanthropist. Tony Stark\'s confidence is only matched by his high-flying abilities as the hero called Iron Man.',
+        link: 'characters/iron-man-tony-stark',
+        context: 'live_action',
+      ),
+      ComicHero(
+        name: 'Spider Man',
+        realName: 'Peter Parker',
+        profileImgUrl: '005smp_ons_crd_02.jpg',
+        description:
+            'Bitten by a radioactive spider, Peter Parker’s arachnid abilities give him amazing powers he uses to help others, while his personal life continues to offer plenty of obstacles.',
+        link: '/characters/spider-man-peter-parker',
+        context: 'live_action',
+      ),
+      ComicHero(
+        name: 'Iron Man',
+        realName: 'Tony Stark',
+        profileImgUrl: '002irm_ons_crd_03.jpg',
+        description:
+            'Genius. Billionaire. Philanthropist. Tony Stark\'s confidence is only matched by his high-flying abilities as the hero called Iron Man.',
+        link: 'characters/iron-man-tony-stark',
+        context: 'live_action',
+      ),
+      ComicHero(
+        name: 'Spider Man',
+        realName: 'Peter Parker',
+        profileImgUrl: '005smp_ons_crd_02.jpg',
+        description:
+            'Bitten by a radioactive spider, Peter Parker’s arachnid abilities give him amazing powers he uses to help others, while his personal life continues to offer plenty of obstacles.',
+        link: '/characters/spider-man-peter-parker',
+        context: 'live_action',
+      ),
+      ComicHero(
+        name: 'Iron Man',
+        realName: 'Tony Stark',
+        profileImgUrl: '002irm_ons_crd_03.jpg',
+        description:
+            'Genius. Billionaire. Philanthropist. Tony Stark\'s confidence is only matched by his high-flying abilities as the hero called Iron Man.',
+        link: 'characters/iron-man-tony-stark',
+        context: 'live_action',
+      ),
+    ]);
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,83 +93,105 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var _heroProfiles = [
-    ComicHero(
-      name: 'Spider Man',
-      realName: 'Peter Parker',
-      profileImgUrl: '005smp_ons_crd_02.jpg',
-      description: 'Bitten by a radioactive spider, Peter Parker’s arachnid abilities give him amazing powers he uses to help others, while his personal life continues to offer plenty of obstacles.',
-      link: '/characters/spider-man-peter-parker',
-      context: 'live_action',
-    ),
-    ComicHero(
-      name: 'Iron Man',
-      realName: 'Tony Stark',
-      profileImgUrl: '002irm_ons_crd_03.jpg',
-      description: 'Genius. Billionaire. Philanthropist. Tony Stark\'s confidence is only matched by his high-flying abilities as the hero called Iron Man.',
-      link: 'characters/iron-man-tony-stark',
-      context: 'live_action',
-    ),
-    ComicHero(
-      name: 'Spider Man',
-      realName: 'Peter Parker',
-      profileImgUrl: '005smp_ons_crd_02.jpg',
-      description: 'Bitten by a radioactive spider, Peter Parker’s arachnid abilities give him amazing powers he uses to help others, while his personal life continues to offer plenty of obstacles.',
-      link: '/characters/spider-man-peter-parker',
-      context: 'live_action',
-    ),
-    ComicHero(
-      name: 'Iron Man',
-      realName: 'Tony Stark',
-      profileImgUrl: '002irm_ons_crd_03.jpg',
-      description: 'Genius. Billionaire. Philanthropist. Tony Stark\'s confidence is only matched by his high-flying abilities as the hero called Iron Man.',
-      link: 'characters/iron-man-tony-stark',
-      context: 'live_action',
-    ),
-    ComicHero(
-      name: 'Spider Man',
-      realName: 'Peter Parker',
-      profileImgUrl: '005smp_ons_crd_02.jpg',
-      description: 'Bitten by a radioactive spider, Peter Parker’s arachnid abilities give him amazing powers he uses to help others, while his personal life continues to offer plenty of obstacles.',
-      link: '/characters/spider-man-peter-parker',
-      context: 'live_action',
-    ),
-    ComicHero(
-      name: 'Iron Man',
-      realName: 'Tony Stark',
-      profileImgUrl: '002irm_ons_crd_03.jpg',
-      description: 'Genius. Billionaire. Philanthropist. Tony Stark\'s confidence is only matched by his high-flying abilities as the hero called Iron Man.',
-      link: 'characters/iron-man-tony-stark',
-      context: 'live_action',
-    ),
-  ];
+  // var _heroProfiles =
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
+    CollectionReference characters = firestore.collection('characters');
+    List<ComicHero> heroList = [];
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('HeroTome'),
       ),
       body: Container(
-        child: GridView.count(
+        // child: buildGrid(characters, heroList),
+        child: buildGrid(),
+      ),
+    );
+  }
+
+  Widget buildGrid() {
+    return Consumer(
+      builder: (context, watch, child) {
+        final heroList = watch(heroListProvider);
+        return GridView.count(
           crossAxisCount: 2,
           childAspectRatio: 4 / 7,
           padding: const EdgeInsets.all(5),
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
-          children: _heroProfiles
+          children: heroList
+              .toList()
               .map((item) => ComicHeroProfileCard(myHero: item))
               .toList(),
-        ),
-      ),
+        );
+      },
     );
   }
+
+  // FutureBuilder<QuerySnapshot> buildGrid(CollectionReference characters, List<ComicHero> heroList) {
+  //   return FutureBuilder<QuerySnapshot>(
+  //         future: characters.limit(100).get(),
+  //         builder:
+  //             (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+  //           if (snapshot.hasError) {
+  //             return Text('ERROR...!');
+  //           }
+
+  //           if (snapshot.hasData && !snapshot.data!.docs.first.exists) {
+  //             return Text('Document not existing');
+  //           }
+
+  //           if (snapshot.connectionState == ConnectionState.waiting) {
+  //             return Center(child: CircularProgressIndicator());
+  //           }
+
+  //           if (snapshot.connectionState == ConnectionState.done) {
+  //             // Map<String, dynamic> data =
+  //             //     snapshot.data!.data() as Map<String, dynamic>;
+  //             // return Text(data['headline']);
+  //             List<QueryDocumentSnapshot>? docsList = snapshot.data?.docs;
+  //             if (docsList != null) {
+  //               for (var doc in docsList) {
+  //                 Map<String, dynamic> data = doc.data();
+  //                 ComicHero hero = getHeroFromDocData(data);
+  //                 heroList.add(hero);
+  //               }
+  //               return GridView.count(
+  //                 crossAxisCount: 2,
+  //                 childAspectRatio: 4 / 7,
+  //                 padding: const EdgeInsets.all(5),
+  //                 crossAxisSpacing: 10,
+  //                 mainAxisSpacing: 10,
+  //                 children: heroList
+  //                     .toList()
+  //                     .map((item) => ComicHeroProfileCard(myHero: item))
+  //                     .toList(),
+  //               );
+  //             } else {
+  //               return Text('Looks like they took the day off');
+  //             }
+  //           }
+  //           return Center(child: Text('No one is home'));
+  //         });
+  // }
+
+}
+
+ComicHero getHeroFromDocData(Map<String, dynamic> data) {
+  ComicHero tempHero = new ComicHero(
+    name: data['headline'] ?? '',
+    realName: data['secondary_text'] ?? '',
+    description: data['description'] ?? '',
+    profileImgUrl: data['image']['filename'] ?? '',
+    link: data['link']['link'] ?? '',
+  );
+  return tempHero;
 }
 
 const String _imageUrlPrefix =
     'https://terrigen-cdn-dev.marvel.com/content/prod/1x/';
-
-
 
 class ComicHeroProfileCard extends StatefulWidget {
   final ComicHero myHero;
@@ -165,11 +249,13 @@ class _ComicHeroProfileCardState extends State<ComicHeroProfileCard> {
                 aspectRatio: 7 / 10,
                 child: ClipRRect(
                   borderRadius: _cornerRadius,
-                  child: Image.network(
-                    _imageUrlPrefix + widget.myHero.profileImgUrl,
-                    // height: 200,
-                    fit: BoxFit.cover,
-                  ),
+                  child: widget.myHero.profileImgUrl.length < 2
+                      ? FlutterLogo()
+                      : Image.network(
+                          _imageUrlPrefix + widget.myHero.profileImgUrl,
+                          // height: 200,
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
               Expanded(
