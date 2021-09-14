@@ -56,64 +56,6 @@ class DetailScreen extends StatelessWidget {
                 return buildChartRows(details.powers, context);
               },
             ),
-            // Consumer(builder: (context, watch, child) {
-            //   final details = watch(comicHeroDetailObj);
-            //   return SizedBox(
-            //     height: 200,
-            //     child: RadarChart(
-            //       RadarChartData(
-            //         dataSets: [
-            //           RadarDataSet(
-            //               entryRadius: 0.0,
-            //               borderColor: Colors.amber,
-            //               dataEntries: details.powers.values
-            //                   .map((e) => RadarEntry(value: e))
-            //                   .toList()),
-            //           RadarDataSet(
-            //             dataEntries: maxValues,
-            //             fillColor: Colors.transparent,
-            //             borderColor: Colors.transparent,
-            //           ),
-            //         ],
-            //         radarBackgroundColor: Colors.transparent,
-            //         borderData: FlBorderData(show: false),
-            //         radarBorderData:
-            //             const BorderSide(color: Colors.transparent),
-            //         gridBorderData: const BorderSide(color: Colors.greenAccent),
-            //         titlePositionPercentageOffset: 0.2,
-            //         // titleTextStyle: const TextStyle(color)
-            //         getTitle: (index) {
-            //           return details.powers.keys.elementAt(index);
-            //         },
-            //         // titleTextStyle: TextStyle(color: Colors.pink),
-            //         tickCount: 1,
-            //         ticksTextStyle: TextStyle(color: Colors.transparent),
-            //         tickBorderData: BorderSide(color: Colors.transparent),
-            //       ),
-            //     ),
-            //   );
-            // }),
-            // Consumer(builder: (context, watch, child) {
-            //   final details = watch(comicHeroDetailObj);
-            //   return SizedBox(
-            //     height: 200,
-            //     child: BarChart(BarChartData(
-            //       maxY: 7,
-            //       barGroups: barGroups,
-            //       titlesData: FlTitlesData(
-            //         leftTitles: SideTitles(showTitles: true),
-            //         topTitles: SideTitles(showTitles: false),
-            //         rightTitles: SideTitles(showTitles: false),
-            //         bottomTitles: SideTitles(
-            //             showTitles: true,
-            //             getTitles: (title) {
-            //               print('Barlow title: ' + title.toString());
-            //               return '';
-            //             }),
-            //       ),
-            //     )),
-            //   );
-            // }),
           ],
         ),
       ),
@@ -217,41 +159,3 @@ Widget buildBarForChart(
   );
 }
 
-// List<BarChartGroupData> get barGroups => [
-//       BarChartGroupData(
-//         x: 0,
-//         barRods: [
-//           BarChartRodData(y: 3, colors: [Colors.pink, Colors.green])
-//         ],
-//       ),
-//       BarChartGroupData(
-//         x: 1,
-//         barRods: [
-//           BarChartRodData(y: 3, colors: [Colors.pink, Colors.green])
-//         ],
-//       ),
-//       BarChartGroupData(
-//         x: 2,
-//         barRods: [
-//           BarChartRodData(y: 5, colors: [Colors.pink, Colors.green])
-//         ],
-//       ),
-//       BarChartGroupData(
-//         x: 3,
-//         barRods: [
-//           BarChartRodData(y: 5, colors: [Colors.pink, Colors.green])
-//         ],
-//       ),
-//       BarChartGroupData(
-//         x: 4,
-//         barRods: [
-//           BarChartRodData(y: 2, colors: [Colors.pink, Colors.green])
-//         ],
-//       ),
-//       BarChartGroupData(
-//         x: 5,
-//         barRods: [
-//           BarChartRodData(y: 3, colors: [Colors.pink, Colors.green])
-//         ],
-//       ),
-//     ];
