@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:herotome/ComicHero.dart';
 import 'package:herotome/DetailsScreen.dart';
+import 'package:herotome/providers.dart';
+
+import 'infrastructure/models/my_hero.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -222,6 +225,9 @@ class _ComicHeroProfileCardState extends State<ComicHeroProfileCard> {
         print('onTapDown - InkWell');
       },
       onTapUp: (TapUpDetails details) {
+        context.read(heroBiographyNotifierProvider.notifier).getBiography(
+            MyHero(name: widget.myHero.name, link: widget.myHero.link));
+
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) {
