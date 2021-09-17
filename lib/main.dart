@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:herotome/ComicHero.dart';
-import 'package:herotome/DetailsScreen.dart';
+import 'package:herotome/screens/DetailsScreen.dart';
 import 'package:herotome/providers.dart';
 
 import 'infrastructure/models/my_hero.dart';
