@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:herotome/infrastructure/models/hero_bio.dart';
 import 'package:herotome/infrastructure/models/my_hero.dart';
 import 'package:herotome/infrastructure/repositories/hero_bio_repository.dart';
 

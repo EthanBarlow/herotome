@@ -3,7 +3,7 @@ import 'package:herotome/application/hero_bio_notifier.dart';
 import 'package:herotome/infrastructure/repositories/hero_bio_repository.dart';
 
 final _heroBiographyRepositoryProvider = Provider<HeroBiographyRepository>(
-  (ref) => FakeHeroBiographyRepository(),
+  (ref) => RealHeroBiographyRepository(),
 );
 
 final heroBiographyNotifierProvider =

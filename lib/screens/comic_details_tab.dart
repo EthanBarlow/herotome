@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:herotome/infrastructure/models/my_hero.dart';
+import 'package:herotome/infrastructure/models/comic_details.dart';
 import 'package:herotome/widgets/attributable_table.dart';
 import 'package:herotome/widgets/bar_chart.dart';
 import 'package:herotome/widgets/custom_card.dart';

@@ -226,7 +226,8 @@ class _ComicHeroProfileCardState extends State<ComicHeroProfileCard> {
       },
       onTapUp: (TapUpDetails details) {
         context.read(heroBiographyNotifierProvider.notifier).getBiography(
-            MyHero(name: widget.myHero.name, link: widget.myHero.link));
+            // MyHero(name: widget.myHero.name, link: widget.myHero.link));
+            MyHero(name: 'Gamora', link: '/characters/gamora'));
 
         Navigator.push(
           context,

@@ -1,6 +1,5 @@
-
 import 'package:flutter/material.dart';
-import 'package:herotome/infrastructure/models/my_hero.dart';
+import 'package:herotome/infrastructure/models/movie_details.dart';
 import 'package:herotome/widgets/custom_carousel.dart';
 
 class MovieDetailsTab extends StatelessWidget {
