@@ -11,6 +11,9 @@ import 'package:herotome/providers.dart';
 const String _imageUrlPrefix =
     'https://terrigen-cdn-dev.marvel.com/content/prod/1x/';
 
+const double heightOfAppBar = 300;
+const int millisForImgAnim = 600;
+
 class DetailScreen extends StatefulWidget {
   const DetailScreen({Key? key}) : super(key: key);
 
@@ -58,7 +61,7 @@ class _DetailScreenState extends State<DetailScreen>
                   (BuildContext context, bool innerBoxIsScrolled) {
                 return [
                   SliverAppBar(
-                    expandedHeight: 300,
+                    expandedHeight: heightOfAppBar,
                     floating: false,
                     pinned: true,
                     snap: false,
@@ -70,10 +73,37 @@ class _DetailScreenState extends State<DetailScreen>
                       )),
                       background: Container(
                         color: Colors.transparent,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(0.0),
+                        child: AnimatedSwitcher(
+                          duration: Duration(milliseconds: millisForImgAnim),
                           child: getConditionalImage(_tabIndex,
                               movieDetails.imgLink, comicDetails.headerImg),
+                          transitionBuilder: (child, animation) {
+                            final offsetAnimation = Tween(
+                              begin: const Offset(0.0, 1.0),
+                              end: const Offset(0.0, 0.0),
+                            ).animate(animation);
+                            return ClipRRect(
+                              child: SlideTransition(
+                                position: offsetAnimation,
+                                child: child,
+                              ),
+                            );
+                          },
+                          switchInCurve: Curves.easeInOutCubic,
+                          switchOutCurve: Curves.easeInOutCubic,
+                          layoutBuilder: (currentChild, previousChildren) {
+                            /* 
+                              without this layout builder the images were displaying at their original size instead of following their boxfit
+                              https://www.raywenderlich.com/24345609-adding-micro-interactions-with-animatedswitcher shows this fix
+                            */
+                            return Stack(
+                              children: [
+                                ...previousChildren,
+                                if (currentChild != null) currentChild,
+                              ],
+                              fit: StackFit.expand,
+                            );
+                          },
                         ),
                       ),
                     ),
