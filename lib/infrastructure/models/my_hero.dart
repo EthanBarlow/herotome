@@ -16,9 +16,6 @@ class HeroProfile extends MyHero {
     required this.imgLink,
     required this.context,
   }) : super(name: name, link: link);
-
-  bool hasComic() => comicDetails.headerImg.length > 1;
-  bool hasMovie() => movieDetails.imgLink.length > 1;
 }
 
 class FeatureHighlights {

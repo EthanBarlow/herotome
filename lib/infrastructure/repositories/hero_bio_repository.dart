@@ -28,7 +28,7 @@ class RealHeroBiographyRepository implements HeroBiographyRepository {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     var querySnapshot = await firestore
         .collection('characterBio')
-        .where('link', isEqualTo: '/characters/gamora')
+        .where('link', isEqualTo: hero.link)
         .get();
 
     return Future(() {

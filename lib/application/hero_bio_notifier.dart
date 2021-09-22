@@ -32,7 +32,7 @@ class HeroBioNotifier extends StateNotifier<HeroBioState> {
   Future<void> getBiography(MyHero hero) async {
     try {
       state = HeroBioLoading();
-      final bio = await _heroBiographyRepository.fetchHeroBiography(MyHero(link: '', name: ''));
+      final bio = await _heroBiographyRepository.fetchHeroBiography(hero);
       state = HeroBioLoaded(bio);
     } on Exception {
       state = HeroBioError("Couldn't get a hold of this hero's secretary. Leave a message...");

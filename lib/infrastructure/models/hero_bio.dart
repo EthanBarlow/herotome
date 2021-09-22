@@ -15,13 +15,15 @@ class HeroBio extends MyHero {
     required this.movieDetails,
   }) : super(name: name, link: link);
 
+  bool hasComic() => comicDetails.headerImg.length > 1 && comicDetails.biography.length >= 1;
+  bool hasMovie() => movieDetails.imgLink.length > 1 && movieDetails.shortBio.length > 1;
+
   static HeroBio fromJson(Map<String, dynamic> map) {
     String tempName = '';
     String tempLink = '';
     String tempMiniBio = '';
     ComicDetails comicDetails = new ComicDetails();
     MovieDetails movieDetails = new MovieDetails();
-
 
     map.forEach((key, value) {
       if (key.contains('headline')) {

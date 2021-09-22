@@ -227,12 +227,13 @@ class _ComicHeroProfileCardState extends State<ComicHeroProfileCard> {
       onTapUp: (TapUpDetails details) {
         context.read(heroBiographyNotifierProvider.notifier).getBiography(
             // MyHero(name: widget.myHero.name, link: widget.myHero.link));
-            MyHero(name: 'Gamora', link: '/characters/gamora'));
+            MyHero(name: 'Aunty May', link: 'characters/aunt-may-may-parker'));
+            // MyHero(name: 'gamora', link: '/characters/gamora'));
 
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) {
-            return DetailScreen(hero: widget.myHero);
+            return DetailScreen();
           }),
         );
         Future.delayed(Duration(milliseconds: 300), () {
