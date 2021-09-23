@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:herotome/extensions/string_extension.dart';
 
 class AttributeTable extends StatelessWidget {
   const AttributeTable({
@@ -19,15 +20,14 @@ class AttributeTable extends StatelessWidget {
           width: 2,
         )),
         columnWidths: {
-          0: FractionColumnWidth(0.3),
-          1: FractionColumnWidth(.7),
+          0: FractionColumnWidth(0.35),
+          1: FractionColumnWidth(0.65),
         },
         children: map.entries
             .map<TableRow>((entry) => TableRow(
                   children: [
                     Container(
-                      //TODO: come back here and add in a helper function to convert a String to camelcase
-                      child: Text(entry.key),
+                      child: Text(entry.key.toTitleCase()),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 14,
                         vertical: 10,

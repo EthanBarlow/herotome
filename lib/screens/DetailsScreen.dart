@@ -116,10 +116,6 @@ class _DetailScreenState extends State<DetailScreen>
                         tabs: [
                           Tab(
                             child: Container(
-                              foregroundDecoration: BoxDecoration(
-                                  color: heroBioState.biography.hasMovie()
-                                      ? Colors.transparent
-                                      : Color(0x44444444)),
                               child: Row(
                                 children: [
                                   Icon(Icons.local_movies_rounded),
@@ -131,10 +127,6 @@ class _DetailScreenState extends State<DetailScreen>
                           ),
                           Tab(
                             child: Container(
-                              foregroundDecoration: BoxDecoration(
-                                  color: heroBioState.biography.hasComic()
-                                      ? Colors.transparent
-                                      : Color(0x44444444)),
                               child: Row(
                                 children: [
                                   Icon(Icons.menu_book_rounded),

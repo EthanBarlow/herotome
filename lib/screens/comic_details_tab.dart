@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:herotome/infrastructure/models/comic_details.dart';
 import 'package:herotome/widgets/attributable_table.dart';
@@ -87,11 +86,18 @@ class ComicDetailsTab extends StatelessWidget {
           const SizedBox(height: 20.0),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: Text(
-              details.biography.toString(),
-              style: TextStyle(fontSize: 16.0),
+            child: Column(
+              children: details.biography
+                  .map(
+                    (paragraph) => Text(
+                      paragraph,
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  )
+                  .toList(),
             ),
           ),
+          const SizedBox(height: 20.0),
         ],
       ),
     );
