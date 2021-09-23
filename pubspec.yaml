@@ -27,6 +27,8 @@ dependencies:
   cloud_firestore: ^1.0.0
   fl_chart: ^0.40.0
   carousel_slider: ^4.0.0
+  cached_network_image: ^3.1.0
+  html_unescape: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
