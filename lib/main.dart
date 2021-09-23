@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:herotome/ComicHero.dart';
+import 'package:herotome/application/hero_profile_notifier.dart';
 import 'package:herotome/screens/DetailsScreen.dart';
 import 'package:herotome/providers.dart';
 
@@ -14,68 +15,12 @@ void main() async {
   runApp(ProviderScope(child: MyApp()));
 }
 
-final heroListProvider = Provider((ref) => [
-      ComicHero(
-        name: 'Spider Man',
-        realName: 'Peter Parker',
-        profileImgUrl: '005smp_ons_crd_02.jpg',
-        description:
-            'Bitten by a radioactive spider, Peter Parker’s arachnid abilities give him amazing powers he uses to help others, while his personal life continues to offer plenty of obstacles.',
-        link: '/characters/spider-man-peter-parker',
-        context: 'live_action',
-      ),
-      ComicHero(
-        name: 'Iron Man',
-        realName: 'Tony Stark',
-        profileImgUrl: '002irm_ons_crd_03.jpg',
-        description:
-            'Genius. Billionaire. Philanthropist. Tony Stark\'s confidence is only matched by his high-flying abilities as the hero called Iron Man.',
-        link: 'characters/iron-man-tony-stark',
-        context: 'live_action',
-      ),
-      ComicHero(
-        name: 'Spider Man',
-        realName: 'Peter Parker',
-        profileImgUrl: '005smp_ons_crd_02.jpg',
-        description:
-            'Bitten by a radioactive spider, Peter Parker’s arachnid abilities give him amazing powers he uses to help others, while his personal life continues to offer plenty of obstacles.',
-        link: '/characters/spider-man-peter-parker',
-        context: 'live_action',
-      ),
-      ComicHero(
-        name: 'Iron Man',
-        realName: 'Tony Stark',
-        profileImgUrl: '002irm_ons_crd_03.jpg',
-        description:
-            'Genius. Billionaire. Philanthropist. Tony Stark\'s confidence is only matched by his high-flying abilities as the hero called Iron Man.',
-        link: 'characters/iron-man-tony-stark',
-        context: 'live_action',
-      ),
-      ComicHero(
-        name: 'Spider Man',
-        realName: 'Peter Parker',
-        profileImgUrl: '005smp_ons_crd_02.jpg',
-        description:
-            'Bitten by a radioactive spider, Peter Parker’s arachnid abilities give him amazing powers he uses to help others, while his personal life continues to offer plenty of obstacles.',
-        link: '/characters/spider-man-peter-parker',
-        context: 'live_action',
-      ),
-      ComicHero(
-        name: 'Iron Man',
-        realName: 'Tony Stark',
-        profileImgUrl: '002irm_ons_crd_03.jpg',
-        description:
-            'Genius. Billionaire. Philanthropist. Tony Stark\'s confidence is only matched by his high-flying abilities as the hero called Iron Man.',
-        link: 'characters/iron-man-tony-stark',
-        context: 'live_action',
-      ),
-    ]);
-
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
 
   @override
   Widget build(BuildContext context) {
+    context.read(profileNotifierProvider.notifier).getProfileList();
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -117,18 +62,25 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget buildGrid() {
     return Consumer(
       builder: (context, watch, child) {
-        final heroList = watch(heroListProvider);
-        return GridView.count(
-          crossAxisCount: 2,
-          childAspectRatio: 4 / 7,
-          padding: const EdgeInsets.all(5),
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          children: heroList
-              .toList()
-              .map((item) => ComicHeroProfileCard(myHero: item))
-              .toList(),
-        );
+        final profileState = watch(profileNotifierProvider);
+        if (profileState is ProfileInitial) {
+          return Center(child: Text('initial state'));
+        } else if (profileState is ProfileLoading) {
+          return Center(child: CircularProgressIndicator());
+        } else if (profileState is ProfileLoaded) {
+          return GridView.count(
+            crossAxisCount: 2,
+            childAspectRatio: 4 / 7,
+            padding: const EdgeInsets.all(5),
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            children: profileState.profiles
+                .map((item) => ComicHeroProfileCard(myHero: item))
+                .toList(),
+          );
+        } else {
+          return Center(child: Text('Unknown state!!!'));
+        }
       },
     );
   }
@@ -197,7 +149,7 @@ const String _imageUrlPrefix =
     'https://terrigen-cdn-dev.marvel.com/content/prod/1x/';
 
 class ComicHeroProfileCard extends StatefulWidget {
-  final ComicHero myHero;
+  final HeroProfile myHero;
 
   ComicHeroProfileCard({required this.myHero});
 
@@ -227,8 +179,8 @@ class _ComicHeroProfileCardState extends State<ComicHeroProfileCard> {
       onTapUp: (TapUpDetails details) {
         context.read(heroBiographyNotifierProvider.notifier).getBiography(
             // MyHero(name: widget.myHero.name, link: widget.myHero.link));
-            MyHero(name: 'Aunty May', link: 'characters/aunt-may-may-parker'));
-            // MyHero(name: 'gamora', link: '/characters/gamora'));
+            // MyHero(name: 'Aunty May', link: 'characters/aunt-may-may-parker'));
+            widget.myHero);
 
         Navigator.push(
           context,
@@ -257,10 +209,10 @@ class _ComicHeroProfileCardState extends State<ComicHeroProfileCard> {
                 aspectRatio: 7 / 10,
                 child: ClipRRect(
                   borderRadius: _cornerRadius,
-                  child: widget.myHero.profileImgUrl.length < 2
+                  child: widget.myHero.imgLink.length < 2
                       ? FlutterLogo()
                       : Image.network(
-                          _imageUrlPrefix + widget.myHero.profileImgUrl,
+                          _imageUrlPrefix + widget.myHero.imgLink,
                           // height: 200,
                           fit: BoxFit.cover,
                         ),
@@ -274,11 +226,11 @@ class _ComicHeroProfileCardState extends State<ComicHeroProfileCard> {
                       widget.myHero.name,
                       style: TextStyle(fontSize: 16.0),
                     ),
-                    SizedBox(height: 6),
-                    Text(
-                      widget.myHero.realName,
-                      style: TextStyle(fontSize: 14.0),
-                    ),
+                    // SizedBox(height: 6),
+                    // Text(
+                    //   widget.myHero.realName,
+                    //   style: TextStyle(fontSize: 14.0),
+                    // ),
                   ],
                 ),
               ),

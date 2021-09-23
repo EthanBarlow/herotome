@@ -3,39 +3,39 @@ import 'package:herotome/infrastructure/models/hero_bio.dart';
 import 'package:herotome/infrastructure/models/my_hero.dart';
 import 'package:herotome/infrastructure/repositories/hero_bio_repository.dart';
 
-abstract class HeroBioState {
-  const HeroBioState();
+abstract class BioState {
+  const BioState();
 }
 
-class HeroBioInitial extends HeroBioState {
-  const HeroBioInitial();
+class BioInitial extends BioState {
+  const BioInitial();
 }
 
-class HeroBioLoading extends HeroBioState {
-  const HeroBioLoading();
+class BioLoading extends BioState {
+  const BioLoading();
 }
 
-class HeroBioLoaded extends HeroBioState {
+class BioLoaded extends BioState {
   final HeroBio biography;
-  const HeroBioLoaded(this.biography);
+  const BioLoaded(this.biography);
 }
 
-class HeroBioError extends HeroBioState {
+class BioError extends BioState {
   final String message;
-  const HeroBioError(this.message);
+  const BioError(this.message);
 }
 
-class HeroBioNotifier extends StateNotifier<HeroBioState> {
+class BioNotifier extends StateNotifier<BioState> {
   final HeroBiographyRepository _heroBiographyRepository;
-  HeroBioNotifier(this._heroBiographyRepository) : super(HeroBioInitial());
+  BioNotifier(this._heroBiographyRepository) : super(BioInitial());
 
-  Future<void> getBiography(MyHero hero) async {
+  Future<void> getBiography(HeroProfile hero) async {
     try {
-      state = HeroBioLoading();
+      state = BioLoading();
       final bio = await _heroBiographyRepository.fetchHeroBiography(hero);
-      state = HeroBioLoaded(bio);
+      state = BioLoaded(bio);
     } on Exception {
-      state = HeroBioError("Couldn't get a hold of this hero's secretary. Leave a message...");
+      state = BioError("Couldn't get a hold of this hero's secretary. Leave a message...");
     }
   }
 }

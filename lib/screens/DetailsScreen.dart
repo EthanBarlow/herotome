@@ -49,11 +49,11 @@ class _DetailScreenState extends State<DetailScreen>
       body: Consumer(
         builder: (context, watch, child) {
           final heroBioState = watch(heroBiographyNotifierProvider);
-          if (heroBioState is HeroBioInitial) {
+          if (heroBioState is BioInitial) {
             return Center(child: Text('INitial'));
-          } else if (heroBioState is HeroBioLoading) {
+          } else if (heroBioState is BioLoading) {
             return Center(child: CircularProgressIndicator());
-          } else if (heroBioState is HeroBioLoaded) {
+          } else if (heroBioState is BioLoaded) {
             MovieDetails movieDetails = heroBioState.biography.movieDetails;
             ComicDetails comicDetails = heroBioState.biography.comicDetails;
             return NestedScrollView(

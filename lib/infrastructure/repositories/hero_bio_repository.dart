@@ -6,24 +6,12 @@ import 'package:herotome/infrastructure/models/my_hero.dart';
 import 'package:herotome/mocks/hero_mock.dart';
 
 abstract class HeroBiographyRepository {
-  Future<HeroBio> fetchHeroBiography(MyHero hero);
+  Future<HeroBio> fetchHeroBiography(HeroProfile hero);
 }
 
 class RealHeroBiographyRepository implements HeroBiographyRepository {
   @override
-  Future<HeroBio> fetchHeroBiography(MyHero hero) async {
-    // TODO: implement fetchHeroBiography
-    /*
-      1. Set up Firebase query based on the character's page/link - check
-      2. Ingest and JSONify the response - check
-      3. Parse as appropriate - check-ish
-        - This may take awhile depending on the bios and the depth
-      4. Instantiate HeroBio object - check
-    */
-
-    List<String> data = [];
-
-    // 1. Firebase query based on the character's page/link
+  Future<HeroBio> fetchHeroBiography(HeroProfile hero) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     var querySnapshot = await firestore
         .collection('characterBio')
