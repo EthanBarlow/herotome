@@ -102,3 +102,13 @@ class Gamora extends HeroBio {
           movieDetails: movieDetails,
         );
 }
+
+class GamoraProfile extends HeroProfile {
+  GamoraProfile()
+      : super(
+          name: 'Gamora',
+          imgLink: '022gam_com_mas_mob_03.jpg',
+          link: 'characters/gamora',
+          context: 'live_action',
+        );
+}

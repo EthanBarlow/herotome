@@ -84,54 +84,6 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
   }
-
-  // FutureBuilder<QuerySnapshot> buildGrid(CollectionReference characters, List<ComicHero> heroList) {
-  //   return FutureBuilder<QuerySnapshot>(
-  //         future: characters.limit(100).get(),
-  //         builder:
-  //             (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-  //           if (snapshot.hasError) {
-  //             return Text('ERROR...!');
-  //           }
-
-  //           if (snapshot.hasData && !snapshot.data!.docs.first.exists) {
-  //             return Text('Document not existing');
-  //           }
-
-  //           if (snapshot.connectionState == ConnectionState.waiting) {
-  //             return Center(child: CircularProgressIndicator());
-  //           }
-
-  //           if (snapshot.connectionState == ConnectionState.done) {
-  //             // Map<String, dynamic> data =
-  //             //     snapshot.data!.data() as Map<String, dynamic>;
-  //             // return Text(data['headline']);
-  //             List<QueryDocumentSnapshot>? docsList = snapshot.data?.docs;
-  //             if (docsList != null) {
-  //               for (var doc in docsList) {
-  //                 Map<String, dynamic> data = doc.data();
-  //                 ComicHero hero = getHeroFromDocData(data);
-  //                 heroList.add(hero);
-  //               }
-  //               return GridView.count(
-  //                 crossAxisCount: 2,
-  //                 childAspectRatio: 4 / 7,
-  //                 padding: const EdgeInsets.all(5),
-  //                 crossAxisSpacing: 10,
-  //                 mainAxisSpacing: 10,
-  //                 children: heroList
-  //                     .toList()
-  //                     .map((item) => ComicHeroProfileCard(myHero: item))
-  //                     .toList(),
-  //               );
-  //             } else {
-  //               return Text('Looks like they took the day off');
-  //             }
-  //           }
-  //           return Center(child: Text('No one is home'));
-  //         });
-  // }
-
 }
 
 const String _imageUrlPrefix =

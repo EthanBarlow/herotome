@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:herotome/infrastructure/models/my_hero.dart';
+import 'package:herotome/mocks/hero_mock.dart';
 
 abstract class ProfileRepository {
   Future<List<HeroProfile>> fetchHeroProfileList();
@@ -36,34 +37,5 @@ class FakeProfileRepository implements ProfileRepository {
 }
 
 final heroGridList = [
-  // HeroProfile(
-  //   name: 'Spider Man',
-  //   imgLink: '005smp_ons_crd_02.jpg',
-  //   link: '/characters/spider-man-peter-parker',
-  //   context: 'live_action',
-  // ),
-  // HeroProfile(
-  //   name: 'Iron Man',
-  //   imgLink: '002irm_ons_crd_03.jpg',
-  //   link: 'characters/iron-man-tony-stark',
-  //   context: 'live_action',
-  // ),
-  // HeroProfile(
-  //   name: '8-ball',
-  //   imgLink: '8-ball.jpg',
-  //   link: 'characters/8-ball-jeff-hagees',
-  //   context: 'live_action',
-  // ),
-  // HeroProfile(
-  //   name: 'Aunt May',
-  //   imgLink: 'auntmayandweirdlookingpete.jpg',
-  //   link: 'characters/aunt-may-may-parker',
-  //   context: 'comic',
-  // ),
-  HeroProfile(
-    name: 'Gamora',
-    imgLink: '022gam_com_mas_mob_03.jpg',
-    link: 'characters/gamora',
-    context: 'live_action',
-  ),
+  GamoraProfile()
 ];
