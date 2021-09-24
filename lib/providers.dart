@@ -5,7 +5,7 @@ import 'package:herotome/infrastructure/repositories/hero_bio_repository.dart';
 import 'package:herotome/infrastructure/repositories/hero_profile_repository.dart';
 
 final _heroBiographyRepositoryProvider = Provider<HeroBiographyRepository>(
-  (ref) => RealHeroBiographyRepository(),
+  (ref) => FakeHeroBiographyRepository(),
 );
 
 final heroBiographyNotifierProvider =
@@ -16,7 +16,7 @@ final imageLinkPrefixProvider =
     Provider((ref) => 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/');
 
 final _profileRepositoryProvider = Provider<ProfileRepository>(
-  (ref) => RealProfileRepository(),
+  (ref) => FakeProfileRepository(),
 );
 
 final profileNotifierProvider = StateNotifierProvider<ProfileNotifier, ProfileState>(
