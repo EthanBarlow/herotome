@@ -44,6 +44,7 @@ class ComicDetailsTab extends StatelessWidget {
           // const SizedBox(height: 20.0),
           // Text(details.physicalAttributes.toString()),
           const SizedBox(height: 20.0),
+          if (details.physicalAttributes.length != 0)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: CustomCard(

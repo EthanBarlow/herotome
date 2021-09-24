@@ -118,9 +118,9 @@ class _DetailScreenState extends State<DetailScreen>
                             child: Container(
                               child: Row(
                                 children: [
-                                  Icon(Icons.local_movies_rounded),
+                                  Icon(Icons.menu_book_rounded),
                                   SizedBox(width: 10),
-                                  Text('Movie'),
+                                  Text('Comic'),
                                 ],
                               ),
                             ),
@@ -129,13 +129,13 @@ class _DetailScreenState extends State<DetailScreen>
                             child: Container(
                               child: Row(
                                 children: [
-                                  Icon(Icons.menu_book_rounded),
+                                  Icon(Icons.local_movies_rounded),
                                   SizedBox(width: 10),
-                                  Text('Comic'),
+                                  Text('Movie'),
                                 ],
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -145,11 +145,13 @@ class _DetailScreenState extends State<DetailScreen>
               body: TabBarView(
                 controller: _tabController,
                 children: [
-                  MovieDetailsTab(details: movieDetails),
                   ComicDetailsTab(details: comicDetails),
+                  MovieDetailsTab(details: movieDetails),
                 ],
               ),
             );
+          } else if (heroBioState is BioError) {
+            return Center(child: Text(heroBioState.message));
           } else {
             return Center(child: Text('Unknown state!!!'));
           }
@@ -162,20 +164,20 @@ class _DetailScreenState extends State<DetailScreen>
 Widget getConditionalImage(
     int index, String movieImgLink, String comicImgLink) {
   if (index == 0) {
-    if (movieImgLink.isNotEmpty) {
+    if (comicImgLink.isNotEmpty && comicImgLink.length > 0) {
       return CachedNetworkImage(
-        key: ValueKey(movieImgLink),
-        imageUrl: _imageUrlPrefix + movieImgLink,
+        key: ValueKey(comicImgLink),
+        imageUrl: _imageUrlPrefix + comicImgLink,
         placeholder: (context, url) => CircularProgressIndicator(),
         errorWidget: (context, url, error) => Icon(Icons.error),
         fit: BoxFit.cover,
       );
     }
   } else if (index == 1) {
-    if (comicImgLink.isNotEmpty) {
+    if (movieImgLink.isNotEmpty) {
       return CachedNetworkImage(
-        key: ValueKey(comicImgLink),
-        imageUrl: _imageUrlPrefix + comicImgLink,
+        key: ValueKey(movieImgLink),
+        imageUrl: _imageUrlPrefix + movieImgLink,
         placeholder: (context, url) => CircularProgressIndicator(),
         errorWidget: (context, url, error) => Icon(Icons.error),
         fit: BoxFit.cover,

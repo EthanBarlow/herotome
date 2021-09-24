@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:herotome/empty_biography_exception.dart';
 import 'package:herotome/infrastructure/models/comic_details.dart';
 import 'package:herotome/infrastructure/models/hero_bio.dart';
 import 'package:herotome/infrastructure/models/movie_details.dart';
@@ -21,7 +22,10 @@ class RealHeroBiographyRepository implements HeroBiographyRepository {
     return Future(() {
       // Since we are getting all of the character data from Marvel's website based on the character page's url,
       // It should be safe to assume that there will only be one document with any given link
-      return HeroBio.fromJson(querySnapshot.docs[0].data());
+      if (querySnapshot.docs.isNotEmpty) {
+        return HeroBio.fromJson(querySnapshot.docs[0].data());
+      }
+      throw EmptyBiographyException('no');
     });
   }
 }

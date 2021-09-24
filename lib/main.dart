@@ -1,8 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:herotome/ComicHero.dart';
 import 'package:herotome/application/hero_profile_notifier.dart';
 import 'package:herotome/screens/DetailsScreen.dart';
 import 'package:herotome/providers.dart';
@@ -46,8 +46,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference characters = firestore.collection('characters');
-    List<ComicHero> heroList = [];
     return Scaffold(
       appBar: AppBar(
         title: Text('HeroTome'),
@@ -134,17 +132,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
 }
 
-ComicHero getHeroFromDocData(Map<String, dynamic> data) {
-  ComicHero tempHero = new ComicHero(
-    name: data['headline'] ?? '',
-    realName: data['secondary_text'] ?? '',
-    description: data['description'] ?? '',
-    profileImgUrl: data['image']['filename'] ?? '',
-    link: data['link']['link'] ?? '',
-  );
-  return tempHero;
-}
-
 const String _imageUrlPrefix =
     'https://terrigen-cdn-dev.marvel.com/content/prod/1x/';
 
@@ -209,10 +196,14 @@ class _ComicHeroProfileCardState extends State<ComicHeroProfileCard> {
                 aspectRatio: 7 / 10,
                 child: ClipRRect(
                   borderRadius: _cornerRadius,
-                  child: widget.myHero.imgLink.length < 2
+                  child: widget.myHero.imgLink.length < 2 || widget.myHero.imgLink.contains('null')
                       ? FlutterLogo()
-                      : Image.network(
-                          _imageUrlPrefix + widget.myHero.imgLink,
+                      : CachedNetworkImage(
+                          imageUrl: _imageUrlPrefix + widget.myHero.imgLink,
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
                           // height: 200,
                           fit: BoxFit.cover,
                         ),
