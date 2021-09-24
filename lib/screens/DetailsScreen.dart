@@ -45,117 +45,119 @@ class _DetailScreenState extends State<DetailScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Consumer(
-        builder: (context, watch, child) {
-          final heroBioState = watch(heroBiographyNotifierProvider);
-          if (heroBioState is BioInitial) {
-            return Center(child: Text('INitial'));
-          } else if (heroBioState is BioLoading) {
-            return Center(child: CircularProgressIndicator());
-          } else if (heroBioState is BioLoaded) {
-            MovieDetails movieDetails = heroBioState.biography.movieDetails;
-            ComicDetails comicDetails = heroBioState.biography.comicDetails;
-            return NestedScrollView(
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
-                return [
-                  SliverAppBar(
-                    expandedHeight: heightOfAppBar,
-                    floating: false,
-                    pinned: true,
-                    snap: false,
-                    flexibleSpace: FlexibleSpaceBar(
-                      centerTitle: true,
-                      title: Container(
-                          child: Text(
-                        heroBioState.biography.name,
-                      )),
-                      background: Container(
-                        color: Colors.transparent,
-                        child: AnimatedSwitcher(
-                          duration: Duration(milliseconds: millisForImgAnim),
-                          child: getConditionalImage(_tabIndex,
-                              movieDetails.imgLink, comicDetails.headerImg),
-                          transitionBuilder: (child, animation) {
-                            final offsetAnimation = Tween(
-                              begin: const Offset(0.0, 1.0),
-                              end: const Offset(0.0, 0.0),
-                            ).animate(animation);
-                            return ClipRRect(
-                              child: SlideTransition(
-                                position: offsetAnimation,
-                                child: child,
-                              ),
-                            );
-                          },
-                          switchInCurve: Curves.easeInOutCubic,
-                          switchOutCurve: Curves.easeInOutCubic,
-                          layoutBuilder: (currentChild, previousChildren) {
-                            /* 
-                              without this layout builder the images were displaying at their original size instead of following their boxfit
-                              https://www.raywenderlich.com/24345609-adding-micro-interactions-with-animatedswitcher shows this fix
-                            */
-                            return Stack(
-                              children: [
-                                ...previousChildren,
-                                if (currentChild != null) currentChild,
-                              ],
-                              fit: StackFit.expand,
-                            );
-                          },
+    return SafeArea(
+      child: Scaffold(
+        body: Consumer(
+          builder: (context, watch, child) {
+            final heroBioState = watch(heroBiographyNotifierProvider);
+            if (heroBioState is BioInitial) {
+              return Center(child: Text('INitial'));
+            } else if (heroBioState is BioLoading) {
+              return Center(child: CircularProgressIndicator());
+            } else if (heroBioState is BioLoaded) {
+              MovieDetails movieDetails = heroBioState.biography.movieDetails;
+              ComicDetails comicDetails = heroBioState.biography.comicDetails;
+              return NestedScrollView(
+                headerSliverBuilder:
+                    (BuildContext context, bool innerBoxIsScrolled) {
+                  return [
+                    SliverAppBar(
+                      expandedHeight: heightOfAppBar,
+                      floating: false,
+                      pinned: true,
+                      snap: false,
+                      flexibleSpace: FlexibleSpaceBar(
+                        centerTitle: true,
+                        title: Container(
+                            child: Text(
+                          heroBioState.biography.name,
+                        )),
+                        background: Container(
+                          color: Colors.transparent,
+                          child: AnimatedSwitcher(
+                            duration: Duration(milliseconds: millisForImgAnim),
+                            child: getConditionalImage(_tabIndex,
+                                movieDetails.imgLink, comicDetails.headerImg),
+                            transitionBuilder: (child, animation) {
+                              final offsetAnimation = Tween(
+                                begin: const Offset(0.0, 1.0),
+                                end: const Offset(0.0, 0.0),
+                              ).animate(animation);
+                              return ClipRRect(
+                                child: SlideTransition(
+                                  position: offsetAnimation,
+                                  child: child,
+                                ),
+                              );
+                            },
+                            switchInCurve: Curves.easeInOutCubic,
+                            switchOutCurve: Curves.easeInOutCubic,
+                            layoutBuilder: (currentChild, previousChildren) {
+                              /* 
+                                without this layout builder the images were displaying at their original size instead of following their boxfit
+                                https://www.raywenderlich.com/24345609-adding-micro-interactions-with-animatedswitcher shows this fix
+                              */
+                              return Stack(
+                                children: [
+                                  ...previousChildren,
+                                  if (currentChild != null) currentChild,
+                                ],
+                                fit: StackFit.expand,
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SliverPersistentHeader(
-                    pinned: true,
-                    delegate: MySliverPersistantHeaderDelegate(
-                      TabBar(
-                        controller: _tabController,
-                        tabs: [
-                          Tab(
-                            child: Container(
-                              child: Row(
-                                children: [
-                                  Icon(Icons.menu_book_rounded),
-                                  SizedBox(width: 10),
-                                  Text('Comic'),
-                                ],
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: MySliverPersistantHeaderDelegate(
+                        TabBar(
+                          controller: _tabController,
+                          tabs: [
+                            Tab(
+                              child: Container(
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.menu_book_rounded),
+                                    SizedBox(width: 10),
+                                    Text('Comic'),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          Tab(
-                            child: Container(
-                              child: Row(
-                                children: [
-                                  Icon(Icons.local_movies_rounded),
-                                  SizedBox(width: 10),
-                                  Text('Movie'),
-                                ],
+                            Tab(
+                              child: Container(
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.local_movies_rounded),
+                                    SizedBox(width: 10),
+                                    Text('Movie'),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ];
-              },
-              body: TabBarView(
-                controller: _tabController,
-                children: [
-                  ComicDetailsTab(details: comicDetails),
-                  MovieDetailsTab(details: movieDetails),
-                ],
-              ),
-            );
-          } else if (heroBioState is BioError) {
-            return Center(child: Text(heroBioState.message));
-          } else {
-            return Center(child: Text('Unknown state!!!'));
-          }
-        },
+                  ];
+                },
+                body: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    ComicDetailsTab(details: comicDetails),
+                    MovieDetailsTab(details: movieDetails),
+                  ],
+                ),
+              );
+            } else if (heroBioState is BioError) {
+              return Center(child: Text(heroBioState.message));
+            } else {
+              return Center(child: Text('Unknown state!!!'));
+            }
+          },
+        ),
       ),
     );
   }
