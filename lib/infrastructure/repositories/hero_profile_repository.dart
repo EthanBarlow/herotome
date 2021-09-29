@@ -7,16 +7,30 @@ abstract class ProfileRepository {
 }
 
 class RealProfileRepository implements ProfileRepository {
+  QueryDocumentSnapshot? _lastInCurrentList;
+  late QuerySnapshot _currentQuerySnapshot;
+  List<HeroProfile> profiles = [];
   @override
   Future<List<HeroProfile>> fetchHeroProfileList() async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
-    var querySnapshot = await firestore
-        .collection('characterProfile')
-        .limit(100)
-        .get();
-
-    List<HeroProfile> profiles = [];
-    querySnapshot.docs
+    // var querySnapshot;
+    if (_lastInCurrentList == null) {
+      _currentQuerySnapshot =
+          await firestore.collection('characterProfile').limit(100).get();
+      _lastInCurrentList = _currentQuerySnapshot.docs
+          .elementAt(_currentQuerySnapshot.docs.length - 1);
+    } else {
+      _currentQuerySnapshot = await firestore
+          .collection('characterProfile')
+          .limit(100)
+          .startAfterDocument(_lastInCurrentList!)
+          .get();
+      _lastInCurrentList = _currentQuerySnapshot.docs
+          .elementAt(_currentQuerySnapshot.docs.length - 1);
+    }
+    // querySnapshot.docs.elementAt(querySnapshot.docs.length-1)
+    // List<HeroProfile> profiles = [];
+    _currentQuerySnapshot.docs
         .forEach((doc) => profiles.add(HeroProfile.fromJson(doc.data())));
 
     return Future(() {
@@ -36,6 +50,4 @@ class FakeProfileRepository implements ProfileRepository {
   }
 }
 
-final heroGridList = [
-  GamoraProfile()
-];
+final heroGridList = [GamoraProfile()];

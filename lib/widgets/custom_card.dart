@@ -20,7 +20,7 @@ class CustomCard extends StatelessWidget {
           ),
         ],
         borderRadius: BorderRadius.circular(12.0),
-        color: Color(0xFF464646),
+        color: const Color(0xFF464646),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
