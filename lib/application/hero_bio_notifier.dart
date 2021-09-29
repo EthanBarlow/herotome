@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:herotome/constants.dart';
 import 'package:herotome/infrastructure/models/hero_bio.dart';
 import 'package:herotome/infrastructure/models/my_hero.dart';
 import 'package:herotome/infrastructure/repositories/hero_bio_repository.dart';
@@ -35,7 +36,7 @@ class BioNotifier extends StateNotifier<BioState> {
       final bio = await _heroBiographyRepository.fetchHeroBiography(hero);
       state = BioLoaded(bio);
     } on Exception {
-      state = BioError("Couldn't get a hold of this hero's secretary. Leave a message...");
+      state = BioError(MyConstants.heroBioErrorMessage);
     }
   }
 }

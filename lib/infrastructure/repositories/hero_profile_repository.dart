@@ -7,6 +7,9 @@ abstract class ProfileRepository {
 }
 
 class RealProfileRepository implements ProfileRepository {
+  final String collection = 'characterProfile';
+  final int numberOfProfiles = 100;
+
   QueryDocumentSnapshot? _lastInCurrentList;
   late QuerySnapshot _currentQuerySnapshot;
   List<HeroProfile> profiles = [];
@@ -16,13 +19,13 @@ class RealProfileRepository implements ProfileRepository {
     // var querySnapshot;
     if (_lastInCurrentList == null) {
       _currentQuerySnapshot =
-          await firestore.collection('characterProfile').limit(100).get();
+          await firestore.collection(collection).limit(numberOfProfiles).get();
       _lastInCurrentList = _currentQuerySnapshot.docs
           .elementAt(_currentQuerySnapshot.docs.length - 1);
     } else {
       _currentQuerySnapshot = await firestore
-          .collection('characterProfile')
-          .limit(100)
+          .collection(collection)
+          .limit(numberOfProfiles)
           .startAfterDocument(_lastInCurrentList!)
           .get();
       _lastInCurrentList = _currentQuerySnapshot.docs

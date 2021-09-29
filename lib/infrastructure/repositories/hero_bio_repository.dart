@@ -11,12 +11,15 @@ abstract class HeroBiographyRepository {
 }
 
 class RealHeroBiographyRepository implements HeroBiographyRepository {
+  final String collection = 'characterBio';
+  final String filter = 'link';
+  
   @override
   Future<HeroBio> fetchHeroBiography(HeroProfile hero) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     var querySnapshot = await firestore
-        .collection('characterBio')
-        .where('link', isEqualTo: hero.link)
+        .collection(collection)
+        .where(filter, isEqualTo: hero.link)
         .get();
 
     return Future(() {

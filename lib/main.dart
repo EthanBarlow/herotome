@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:herotome/application/hero_profile_notifier.dart';
+import 'package:herotome/constants.dart';
 import 'package:herotome/screens/DetailsScreen.dart';
 import 'package:herotome/providers.dart';
 
@@ -11,7 +12,7 @@ import 'infrastructure/models/my_hero.dart';
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
-  runApp(ProviderScope(child: MyApp()));
+  runApp(MyConstants(child: ProviderScope(child: MyApp())));
 }
 
 class MyApp extends StatelessWidget {
