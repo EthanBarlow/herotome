@@ -1,3 +1,4 @@
+import 'package:herotome/constants.dart';
 import 'package:html_unescape/html_unescape_small.dart';
 
 class ComicDetails {
@@ -28,15 +29,15 @@ class ComicDetails {
     var unescape = HtmlUnescape();
 
     comicMap.forEach((key, value) {
-      if (key.contains('header_image')) {
+      if (key.contains(MyConstants.headerImageKey)) {
         tempHeaderImg = value.toString();
-      } else if (key.contains('crowd_sourced')) {
+      } else if (key.contains(MyConstants.crowdSourcedKey)) {
         tempCrowdSourced = value;
-      } else if (key.contains('biography')) {
+      } else if (key.contains(MyConstants.biographyKey)) {
         for (int i = 0; i < value.length; i++) {
           tempBiography.add(unescape.convert(value[i].toString()));
         }
-      } else if (key.contains('contextual_attributes')) {
+      } else if (key.contains(MyConstants.contextualAttributesKey)) {
         List<dynamic> valueList = value as List<dynamic>;
         for (int i = 0; i < valueList.length; i++) {
           Map<String, dynamic> dynamicMap = valueList[i];
@@ -46,7 +47,7 @@ class ComicDetails {
           tempContextualAttributes
               .removeWhere((key, value) => value.length == 0);
         }
-      } else if (key.contains('physical_attributes')) {
+      } else if (key.contains(MyConstants.physicalAttributesKey)) {
         List<dynamic> valueList = value as List<dynamic>;
         for (int i = 0; i < valueList.length; i++) {
           Map<String, dynamic> dynamicMap = valueList[i];
@@ -57,7 +58,7 @@ class ComicDetails {
           tempPhysicalAttributes.addAll(stringMap);
           tempPhysicalAttributes.removeWhere((key, value) => value.length == 0);
         }
-      } else if (key.contains('power_grid')) {
+      } else if (key.contains(MyConstants.powerGridKey)) {
         List<dynamic> valueList = value as List<dynamic>;
         for (int i = 0; i < valueList.length; i++) {
           Map<String, dynamic> dynamicMap = valueList[i];
