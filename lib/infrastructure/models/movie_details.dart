@@ -37,11 +37,6 @@ class MovieDetails {
       }
     });
 
-    print('img link - $tempImgLink');
-    print('short bio - $tempShortBio');
-    print('powers and abilities - $tempPowerAbilities');
-    print('story momemnt - $tempStoryMoments');
-
     return MovieDetails(
       imgLink: tempImgLink,
       shortBio: tempShortBio,

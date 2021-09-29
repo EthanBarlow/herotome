@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,6 +42,20 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // var _heroProfiles =
   // final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late final ScrollController _scrollController;
+  _scrollListener() {
+    print(_scrollController.position.extentAfter);
+    if (_scrollController.position.extentAfter < 500) {
+      context.read(profileNotifierProvider.notifier).getProfileList();
+    }
+  }
+
+  @override
+  void initState() {
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,70 +81,27 @@ class _MyHomePageState extends State<MyHomePage> {
         } else if (profileState is ProfileLoading) {
           return Center(child: CircularProgressIndicator());
         } else if (profileState is ProfileLoaded) {
-          return GridView.count(
-            crossAxisCount: 2,
-            childAspectRatio: 4 / 7,
-            padding: const EdgeInsets.all(5),
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            children: profileState.profiles
-                .map((item) => ComicHeroProfileCard(myHero: item))
-                .toList(),
-          );
+          return GridView.builder(
+              key: PageStorageKey<String>('controllerA'),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 4 / 7,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              controller: _scrollController,
+              itemCount: profileState.profiles.length,
+              padding: const EdgeInsets.all(5),
+              itemBuilder: (BuildContext context, int elementIndex) {
+                return ComicHeroProfileCard(
+                    myHero: profileState.profiles.elementAt(elementIndex));
+              });
         } else {
           return Center(child: Text('Unknown state!!!'));
         }
       },
     );
   }
-
-  // FutureBuilder<QuerySnapshot> buildGrid(CollectionReference characters, List<ComicHero> heroList) {
-  //   return FutureBuilder<QuerySnapshot>(
-  //         future: characters.limit(100).get(),
-  //         builder:
-  //             (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-  //           if (snapshot.hasError) {
-  //             return Text('ERROR...!');
-  //           }
-
-  //           if (snapshot.hasData && !snapshot.data!.docs.first.exists) {
-  //             return Text('Document not existing');
-  //           }
-
-  //           if (snapshot.connectionState == ConnectionState.waiting) {
-  //             return Center(child: CircularProgressIndicator());
-  //           }
-
-  //           if (snapshot.connectionState == ConnectionState.done) {
-  //             // Map<String, dynamic> data =
-  //             //     snapshot.data!.data() as Map<String, dynamic>;
-  //             // return Text(data['headline']);
-  //             List<QueryDocumentSnapshot>? docsList = snapshot.data?.docs;
-  //             if (docsList != null) {
-  //               for (var doc in docsList) {
-  //                 Map<String, dynamic> data = doc.data();
-  //                 ComicHero hero = getHeroFromDocData(data);
-  //                 heroList.add(hero);
-  //               }
-  //               return GridView.count(
-  //                 crossAxisCount: 2,
-  //                 childAspectRatio: 4 / 7,
-  //                 padding: const EdgeInsets.all(5),
-  //                 crossAxisSpacing: 10,
-  //                 mainAxisSpacing: 10,
-  //                 children: heroList
-  //                     .toList()
-  //                     .map((item) => ComicHeroProfileCard(myHero: item))
-  //                     .toList(),
-  //               );
-  //             } else {
-  //               return Text('Looks like they took the day off');
-  //             }
-  //           }
-  //           return Center(child: Text('No one is home'));
-  //         });
-  // }
-
 }
 
 const String _imageUrlPrefix =
@@ -165,11 +135,15 @@ class _ComicHeroProfileCardState extends State<ComicHeroProfileCard> {
         });
         print('onTapDown - InkWell');
       },
+      onTapCancel: () {
+        setState(() {
+          _pressed = false;
+        });
+      },
       onTapUp: (TapUpDetails details) {
-        context.read(heroBiographyNotifierProvider.notifier).getBiography(
-            // MyHero(name: widget.myHero.name, link: widget.myHero.link));
-            // MyHero(name: 'Aunty May', link: 'characters/aunt-may-may-parker'));
-            widget.myHero);
+        context
+            .read(heroBiographyNotifierProvider.notifier)
+            .getBiography(widget.myHero);
 
         Navigator.push(
           context,
@@ -198,12 +172,13 @@ class _ComicHeroProfileCardState extends State<ComicHeroProfileCard> {
                 aspectRatio: 7 / 10,
                 child: ClipRRect(
                   borderRadius: _cornerRadius,
-                  child: widget.myHero.imgLink.length < 2 || widget.myHero.imgLink.contains('null')
+                  child: widget.myHero.imgLink.length < 2 ||
+                          widget.myHero.imgLink.contains('null')
                       ? FlutterLogo()
                       : CachedNetworkImage(
                           imageUrl: _imageUrlPrefix + widget.myHero.imgLink,
                           placeholder: (context, url) =>
-                              CircularProgressIndicator(),
+                              Center(child: CircularProgressIndicator()),
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error),
                           // height: 200,

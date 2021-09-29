@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class _MovieDetailsTabState extends State<MovieDetailsTab>
     with TickerProviderStateMixin {
   late Animation _cameraAnimation;
   late AnimationController _cameraAnimationController;
+  late Timer _timer;
 
   @override
   void initState() {
@@ -55,21 +57,24 @@ class _MovieDetailsTabState extends State<MovieDetailsTab>
         weight: 1,
       ),
     ]).animate(_cameraAnimationController);
+
+    // Fix for an error I was having: found on stack overflow
+    //https://stackoverflow.com/questions/62726872/flutter-delayed-animation-code-error-animationcontroller-forward-called-afte
+    _timer = Timer(Duration(milliseconds: 300), () {
+      _cameraAnimationController.forward();
+    });
     super.initState();
   }
 
   @override
   void dispose() {
-    _cameraAnimationController.dispose();
     super.dispose();
+    _cameraAnimationController.dispose();
+    _timer.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(milliseconds: 300), () {
-      _cameraAnimationController.forward();
-    });
-    // .then((value) => _cameraAnimationController.reverse());
     return widget.details.imgLink.length == 0
         ? Center(
             child: Column(
@@ -89,7 +94,14 @@ class _MovieDetailsTabState extends State<MovieDetailsTab>
               ),
               Padding(
                 padding: const EdgeInsets.all(18.0),
-                child: Text('This character is still fighting for their place in the MCU', style: TextStyle(color: Colors.grey[600], fontSize: 18.0,),textAlign: TextAlign.center,),
+                child: Text(
+                  'This character is still fighting for their place in the MCU',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 18.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ))

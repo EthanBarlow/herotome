@@ -45,7 +45,6 @@ class ComicDetails {
           tempContextualAttributes.addAll(stringMap);
           tempContextualAttributes
               .removeWhere((key, value) => value.length == 0);
-          print(tempContextualAttributes);
         }
       } else if (key.contains('physical_attributes')) {
         List<dynamic> valueList = value as List<dynamic>;
