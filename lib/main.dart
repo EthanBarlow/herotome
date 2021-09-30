@@ -70,10 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text('HeroTome'),
         ),
-        body: Container(
-          // child: buildGrid(characters, heroList),
-          child: buildGrid(),
-        ),
+        body: Container(child: buildGrid()),
       ),
     );
   }

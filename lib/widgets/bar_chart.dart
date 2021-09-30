@@ -31,13 +31,16 @@ Widget buildPowerRatingChart(Map<String, int> powers, BuildContext context) {
   List<Widget> ratingColumnList = [];
 
   for (var power in powers.keys) {
-    String title = powerTitles[power]!;
-    int rating = powers[power]!;
+    if (powerTitles[power] == null) {
+      continue;
+    }
+    String title = powerTitles[power] ?? 'error';
+    int rating = powers[power] ?? 0;
     labelColumnList
         .add(Container(width: fullWidth * textWidthFactor, child: Text(title)));
     ratingColumnList.add(
       buildBarForChart(rating.toDouble(), fullWidth, powerBarWidthFactor,
-          maxVal, powerColors[power.toLowerCase()]!),
+          maxVal, powerColors[power.toLowerCase()] ?? Colors.black),
     );
   }
 
@@ -55,7 +58,10 @@ Widget buildPowerRatingChart(Map<String, int> powers, BuildContext context) {
     ));
   }
 
-  return Column(children: myRows);
+  return Column(
+    key: Key('buildPowerRatingChart-parent'),
+    children: myRows,
+  );
 }
 
 Widget buildBarForChart(double rating, double fullWidth,
