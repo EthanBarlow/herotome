@@ -60,6 +60,7 @@ Widget buildPowerRatingChart(Map<String, int> powers, BuildContext context) {
 
 Widget buildBarForChart(double rating, double fullWidth,
     double powerBarWidthFactor, int maxVal, Color powerBarColor) {
+  // handling for improper/invalid input
   if (maxVal <= 0) {
     maxVal = 1;
   }
@@ -73,6 +74,7 @@ Widget buildBarForChart(double rating, double fullWidth,
   } else if (powerBarWidthFactor > 1) {
     powerBarWidthFactor = 1;
   }
+
   double emptyBoxSize = maxVal - rating;
   return Container(
     // Grey bar/background
