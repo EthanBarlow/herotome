@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:herotome/constants.dart';
 import 'package:herotome/infrastructure/models/my_hero.dart';
 import 'package:herotome/mocks/hero_mock.dart';
 
@@ -8,7 +9,7 @@ abstract class ProfileRepository {
 
 class RealProfileRepository implements ProfileRepository {
   final String collection = 'characterProfile';
-  final int numberOfProfiles = 10;
+  // final int numberOfProfiles = 10;
 
   QueryDocumentSnapshot? _lastInCurrentList;
   late QuerySnapshot _currentQuerySnapshot;
@@ -18,14 +19,16 @@ class RealProfileRepository implements ProfileRepository {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     // var querySnapshot;
     if (_lastInCurrentList == null) {
-      _currentQuerySnapshot =
-          await firestore.collection(collection).limit(numberOfProfiles).get();
+      _currentQuerySnapshot = await firestore
+          .collection(collection)
+          .limit(MyConstants.numberOfProfilesPerBatch)
+          .get();
       _lastInCurrentList = _currentQuerySnapshot.docs
           .elementAt(_currentQuerySnapshot.docs.length - 1);
     } else {
       _currentQuerySnapshot = await firestore
           .collection(collection)
-          .limit(numberOfProfiles)
+          .limit(MyConstants.numberOfProfilesPerBatch)
           .startAfterDocument(_lastInCurrentList!)
           .get();
       _lastInCurrentList = _currentQuerySnapshot.docs

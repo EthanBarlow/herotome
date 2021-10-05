@@ -171,8 +171,8 @@ Widget getConditionalImage(
       return CachedNetworkImage(
         key: ValueKey(comicImgLink),
         imageUrl: _imageUrlPrefix + comicImgLink,
-        placeholder: (context, url) => CircularProgressIndicator(),
-        errorWidget: (context, url, error) => Icon(Icons.error),
+        placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+        errorWidget: (context, url, error) => Center(child: Icon(Icons.error)),
         fit: BoxFit.cover,
       );
     }
@@ -181,8 +181,8 @@ Widget getConditionalImage(
       return CachedNetworkImage(
         key: ValueKey(movieImgLink),
         imageUrl: _imageUrlPrefix + movieImgLink,
-        placeholder: (context, url) => CircularProgressIndicator(),
-        errorWidget: (context, url, error) => Icon(Icons.error),
+        placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+        errorWidget: (context, url, error) => Center(child: Icon(Icons.error)),
         fit: BoxFit.cover,
       );
     }

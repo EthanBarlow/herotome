@@ -44,6 +44,9 @@ class MyConstants extends InheritedWidget {
   static const String movieDetailsStoryMoments = 'Story Moments';
   static const String movieDetailsPowersAbilities = 'Powers & Abilities';
 
+  static const int maxNetworkCallsPerDay = 200;
+  static const int numberOfProfilesPerBatch = 10;
+
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) => false;
 }
