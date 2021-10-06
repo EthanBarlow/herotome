@@ -6,6 +6,7 @@ import 'package:herotome/infrastructure/models/comic_details.dart';
 import 'package:herotome/infrastructure/models/movie_details.dart';
 import 'package:herotome/screens/comic_details_tab.dart';
 import 'package:herotome/screens/movie_details_tab.dart';
+import 'package:herotome/widgets/marvel_placeholder.dart';
 import '../application/hero_bio_notifier.dart';
 import 'package:herotome/providers.dart';
 
@@ -187,11 +188,9 @@ Widget getConditionalImage(
       );
     }
   }
-  return Center(
+  return Container(
     key: UniqueKey(),
-    child: FlutterLogo(
-      size: 40,
-    ),
+    child: MarvelPlaceholder()
   );
 }
 

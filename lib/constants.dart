@@ -44,8 +44,17 @@ class MyConstants extends InheritedWidget {
   static const String movieDetailsStoryMoments = 'Story Moments';
   static const String movieDetailsPowersAbilities = 'Powers & Abilities';
 
+  static const String emptyBiographyException = 'EmptyBiographyException thrown. Must not have a biography saved in firestore.\n';
+
+  static const String searchQueryTooShort = 'Search term must be longer than two letters.';
+  static const String emptySnapshotMessage = 'Error or no heroes...';
+
   static const int maxNetworkCallsPerDay = 200;
   static const int numberOfProfilesPerBatch = 20;
+
+  static const Color marvelRed = const Color(0xFFE62429);
+  static const Color marvelOffWhite = const Color(0xFFFEFEFE);
+
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) => false;

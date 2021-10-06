@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:herotome/constants.dart';
 import 'package:herotome/infrastructure/models/my_hero.dart';
 import 'package:herotome/infrastructure/repositories/algolia_search.dart';
 import 'package:herotome/widgets/my_list_tile.dart';
@@ -36,7 +37,7 @@ class CustomSearchDelegate extends SearchDelegate {
         children: [
           Center(
               child: Text(
-            'Search term must be longer than two letters.',
+            MyConstants.searchQueryTooShort,
           ))
         ],
       );
@@ -46,9 +47,9 @@ class CustomSearchDelegate extends SearchDelegate {
     return FutureBuilder(
         future: results,
         builder: (context, AsyncSnapshot<List<HeroProfile>> snapshot) {
-          if (!snapshot.hasData) {
+          if (!snapshot.hasData || snapshot.data?.length == 0) {
             return Center(
-              child: Text('Error or no heroes...'),
+              child: Text(MyConstants.emptySnapshotMessage),
             );
           } else {
             return ListView(

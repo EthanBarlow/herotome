@@ -8,6 +8,7 @@ import 'package:herotome/constants.dart';
 import 'package:herotome/delegates/custom_search_delegate.dart';
 import 'package:herotome/screens/DetailsScreen.dart';
 import 'package:herotome/providers.dart';
+import 'package:herotome/widgets/marvel_placeholder.dart';
 
 import 'infrastructure/models/my_hero.dart';
 
@@ -137,18 +138,11 @@ class _ComicHeroProfileCardState extends State<ComicHeroProfileCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // key: PageStorageKey(widget.myHero.link),
-      // onTap: () {
-      //   setState(() {
-      //     _pressed = true;
-      //   });
-      //   print('onTap - InkWell');
-      // },
+      key: PageStorageKey(widget.myHero.link),
       onTapDown: (TapDownDetails details) {
         setState(() {
           _pressed = true;
         });
-        print('onTapDown - InkWell');
       },
       onTapCancel: () {
         setState(() {
@@ -171,11 +165,9 @@ class _ComicHeroProfileCardState extends State<ComicHeroProfileCard> {
             _pressed = false;
           });
         });
-        print('onTapUp - InkWell');
       },
       child: AnimatedOpacity(
         opacity: _pressed ? 0.5 : 1.0,
-        // opacity: 1.0,
         duration: Duration(milliseconds: 200),
         child: Card(
           shape: RoundedRectangleBorder(borderRadius: _cornerRadius),
@@ -189,7 +181,7 @@ class _ComicHeroProfileCardState extends State<ComicHeroProfileCard> {
                   borderRadius: _cornerRadius,
                   child: widget.myHero.imgLink.length < 2 ||
                           widget.myHero.imgLink.contains('null')
-                      ? FlutterLogo()
+                      ? MarvelPlaceholder()
                       : CachedNetworkImage(
                           imageUrl: _imageUrlPrefix + widget.myHero.imgLink,
                           placeholder: (context, url) =>

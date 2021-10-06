@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:herotome/infrastructure/models/my_hero.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:herotome/screens/DetailsScreen.dart';
+import 'package:herotome/widgets/marvel_placeholder.dart';
 
 import '../providers.dart';
 
@@ -22,9 +23,6 @@ class MyListTile extends StatelessWidget {
         final notifier = watch(heroBiographyNotifierProvider.notifier);
         return GestureDetector(
           onTap: () {
-            print('printing result');
-            print(result.toString());
-            // this.close();
             notifier.getBiography(result);
             Navigator.push(
               context,
@@ -34,7 +32,6 @@ class MyListTile extends StatelessWidget {
             );
           },
           child: Container(
-            color: Colors.orange,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -43,15 +40,13 @@ class MyListTile extends StatelessWidget {
                   Consumer(
                     builder: (context, watch, child) {
                       String imageUrlPrefix = watch(imageLinkPrefixProvider);
-                      return CircleAvatar(
-                        radius: 35.0,
-                        foregroundImage: result.imgLink.contains('null') == true
-                            ? NetworkImage(
-                                'https://cdn.epicstream.com/assets/uploads/ckeditor/images/1625689604_Loki%20The%20Void%201.jpg')
-                            : CachedNetworkImageProvider(
-                                    imageUrlPrefix + result.imgLink)
-                                as ImageProvider,
-                      );
+                      return result.imgLink.contains('null') == true
+                          ? MarvelPlaceholderCircleAvatar()
+                          : CircleAvatar(
+                              radius: 35.0,
+                              foregroundImage: CachedNetworkImageProvider(
+                                  imageUrlPrefix + result.imgLink),
+                            );
                     },
                   ),
                   SizedBox(width: 20.0),
@@ -63,7 +58,6 @@ class MyListTile extends StatelessWidget {
                       style: TextStyle(fontSize: 22.0),
                     ),
                   ),
-                  // SizedBox(width: 20.0),
                 ],
               ),
             ),
