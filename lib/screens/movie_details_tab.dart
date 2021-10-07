@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:herotome/constants.dart';
 import 'package:herotome/infrastructure/models/movie_details.dart';
 import 'package:herotome/widgets/custom_carousel.dart';
 
@@ -95,7 +96,7 @@ class _MovieDetailsTabState extends State<MovieDetailsTab>
               Padding(
                 padding: const EdgeInsets.all(18.0),
                 child: Text(
-                  'This character is still fighting for their place in the MCU',
+                  MyConstants.movieDetailsNoMovieYet,
                   style: TextStyle(
                     color: Colors.grey[600],
                     fontSize: 18.0,
@@ -122,7 +123,7 @@ class _MovieDetailsTabState extends State<MovieDetailsTab>
                   child: Container(
                     width: double.infinity,
                     child: Text(
-                      'Story Moments',
+                      MyConstants.movieDetailsStoryMoments,
                       style: TextStyle(fontSize: 22.0),
                     ),
                   ),
@@ -143,7 +144,7 @@ class _MovieDetailsTabState extends State<MovieDetailsTab>
                   child: Container(
                     width: double.infinity,
                     child: Text(
-                      'Powers & Abilities',
+                      MyConstants.movieDetailsPowersAbilities,
                       style: TextStyle(fontSize: 22.0),
                     ),
                   ),

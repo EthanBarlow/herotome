@@ -1,3 +1,4 @@
+import 'package:herotome/constants.dart';
 import 'package:herotome/infrastructure/models/my_hero.dart';
 
 class MovieDetails {
@@ -49,11 +50,11 @@ class MovieDetails {
 FeatureHighlights mapTrioParser(Map<String, dynamic> map) {
   String tempDesc = '', tempImg = '', tempTitle = '';
   map.forEach((key, value) {
-    if (key.contains('description')) {
+    if (key.contains(MyConstants.descriptionKey)) {
       tempDesc = value;
-    } else if (key.contains('image')) {
+    } else if (key.contains(MyConstants.imageKey)) {
       tempImg = value;
-    } else if (key.contains('title')) {
+    } else if (key.contains(MyConstants.titleKey)) {
       tempTitle = value;
     }
   });

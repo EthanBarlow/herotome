@@ -1,17 +1,24 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:herotome/application/hero_profile_notifier.dart';
+import 'package:herotome/constants.dart';
+import 'package:herotome/delegates/custom_search_delegate.dart';
 import 'package:herotome/screens/DetailsScreen.dart';
 import 'package:herotome/providers.dart';
+import 'package:herotome/widgets/marvel_placeholder.dart';
 
 import 'infrastructure/models/my_hero.dart';
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
-  runApp(ProviderScope(child: MyApp()));
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  // String host = Platform.isAndroid ? '10.0.2.2:8080' : 'localhost:8080';
+  // FirebaseFirestore.instance.settings = Settings(host: host, sslEnabled: false, persistenceEnabled: false);
+  await dotenv.load(fileName: "assets/.env");
+  runApp(MyConstants(child: ProviderScope(child: MyApp())));
 }
 
 class MyApp extends StatelessWidget {
@@ -45,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late final ScrollController _scrollController;
   _scrollListener() {
     print(_scrollController.position.extentAfter);
-    if (_scrollController.position.extentAfter < 500) {
+    if (_scrollController.position.extentAfter < 800) {
       context.read(profileNotifierProvider.notifier).getProfileList();
     }
   }
@@ -63,11 +70,19 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('HeroTome'),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.search_rounded),
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: CustomSearchDelegate(),
+                );
+              },
+            ),
+          ],
         ),
-        body: Container(
-          // child: buildGrid(characters, heroList),
-          child: buildGrid(),
-        ),
+        body: Container(child: buildGrid()),
       ),
     );
   }
@@ -123,17 +138,11 @@ class _ComicHeroProfileCardState extends State<ComicHeroProfileCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // onTap: () {
-      //   setState(() {
-      //     _pressed = true;
-      //   });
-      //   print('onTap - InkWell');
-      // },
+      key: PageStorageKey(widget.myHero.link),
       onTapDown: (TapDownDetails details) {
         setState(() {
           _pressed = true;
         });
-        print('onTapDown - InkWell');
       },
       onTapCancel: () {
         setState(() {
@@ -156,11 +165,9 @@ class _ComicHeroProfileCardState extends State<ComicHeroProfileCard> {
             _pressed = false;
           });
         });
-        print('onTapUp - InkWell');
       },
       child: AnimatedOpacity(
         opacity: _pressed ? 0.5 : 1.0,
-        // opacity: 1.0,
         duration: Duration(milliseconds: 200),
         child: Card(
           shape: RoundedRectangleBorder(borderRadius: _cornerRadius),
@@ -174,7 +181,7 @@ class _ComicHeroProfileCardState extends State<ComicHeroProfileCard> {
                   borderRadius: _cornerRadius,
                   child: widget.myHero.imgLink.length < 2 ||
                           widget.myHero.imgLink.contains('null')
-                      ? FlutterLogo()
+                      ? MarvelPlaceholder()
                       : CachedNetworkImage(
                           imageUrl: _imageUrlPrefix + widget.myHero.imgLink,
                           placeholder: (context, url) =>

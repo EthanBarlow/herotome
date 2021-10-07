@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:herotome/constants.dart';
 import 'package:herotome/infrastructure/models/comic_details.dart';
 import 'package:herotome/widgets/attributable_table.dart';
 import 'package:herotome/widgets/bar_chart.dart';
@@ -51,7 +52,7 @@ class ComicDetailsTab extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    'Physical Attributes',
+                    MyConstants.comicDetailsTabPhysicalAttr,
                     style: TextStyle(fontSize: 18.0),
                   ),
                   Divider(
@@ -71,7 +72,7 @@ class ComicDetailsTab extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    'Other Attributes',
+                    MyConstants.comicDetailsTabContextAttr,
                     style: TextStyle(fontSize: 18.0),
                   ),
                   Divider(

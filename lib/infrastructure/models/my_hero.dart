@@ -1,3 +1,5 @@
+import 'package:herotome/constants.dart';
+
 class MyHero {
   final String name;
   final String link;
@@ -22,13 +24,13 @@ class HeroProfile extends MyHero {
     String tempContext = '';
 
     map.forEach((key, value) {
-      if (key.contains('headline')) {
+      if (key.contains(MyConstants.headlineKey)) {
         tempName = value.toString();
-      } else if (key.contains('link')) {
+      } else if (key.contains(MyConstants.linkKey)) {
         tempLink = value.toString();
-      } else if (key.contains('image')) {
+      } else if (key.contains(MyConstants.imageKey)) {
         tempImgLink = value.toString();
-      } else if (key.contains('context')) {
+      } else if (key.contains(MyConstants.contextKey)) {
         tempContext = value.toString();
       } else {
         // should never get here as long as the data in firebase does not change format / structure

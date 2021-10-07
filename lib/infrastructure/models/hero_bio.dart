@@ -1,3 +1,4 @@
+import 'package:herotome/constants.dart';
 import 'package:herotome/infrastructure/models/comic_details.dart';
 import 'package:herotome/infrastructure/models/movie_details.dart';
 import 'package:herotome/infrastructure/models/my_hero.dart';
@@ -26,15 +27,15 @@ class HeroBio extends MyHero {
     MovieDetails movieDetails = new MovieDetails();
 
     map.forEach((key, value) {
-      if (key.contains('headline')) {
+      if (key.contains(MyConstants.headlineKey)) {
         tempName = value.toString();
-      } else if (key.contains('link')) {
+      } else if (key.contains(MyConstants.linkKey)) {
         tempLink = value.toString();
-      } else if (key.contains('miniBio')) {
+      } else if (key.contains(MyConstants.miniBioKey)) {
         tempMiniBio = value.toString();
-      } else if (key.contains('comic')) {
+      } else if (key.contains(MyConstants.comicKey)) {
         comicDetails = ComicDetails.fromJson(value as Map<String, dynamic>);
-      } else if (key.contains('live_action')) {
+      } else if (key.contains(MyConstants.liveActionKey)) {
         movieDetails = MovieDetails.fromJson(value as Map<String, dynamic>);
       } else {
         // should never get here as long as the data in firebase does not change format / structure

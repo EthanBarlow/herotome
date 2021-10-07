@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:herotome/constants.dart';
 import 'package:herotome/infrastructure/models/my_hero.dart';
 import 'package:herotome/infrastructure/repositories/hero_profile_repository.dart';
 
@@ -34,7 +35,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
       final profiles = await _profileRepository.fetchHeroProfileList();
       state = ProfileLoaded(profiles);
     } on Exception {
-      state = ProfileError("The directory is not working at the moment");
+      state = ProfileError(MyConstants.heroProfileErrorMessage);
     }
   }
 }

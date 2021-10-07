@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:herotome/constants.dart';
 import 'package:herotome/infrastructure/models/comic_details.dart';
 import 'package:herotome/infrastructure/models/movie_details.dart';
 import 'package:herotome/screens/comic_details_tab.dart';
 import 'package:herotome/screens/movie_details_tab.dart';
+import 'package:herotome/widgets/marvel_placeholder.dart';
 import '../application/hero_bio_notifier.dart';
 import 'package:herotome/providers.dart';
 
@@ -51,7 +53,7 @@ class _DetailScreenState extends State<DetailScreen>
           builder: (context, watch, child) {
             final heroBioState = watch(heroBiographyNotifierProvider);
             if (heroBioState is BioInitial) {
-              return Center(child: Text('INitial'));
+              return Center(child: Text('Initial'));
             } else if (heroBioState is BioLoading) {
               return Center(child: CircularProgressIndicator());
             } else if (heroBioState is BioLoaded) {
@@ -121,7 +123,7 @@ class _DetailScreenState extends State<DetailScreen>
                                   children: [
                                     Icon(Icons.menu_book_rounded),
                                     SizedBox(width: 10),
-                                    Text('Comic'),
+                                    Text(MyConstants.detailsScreenComicTab),
                                   ],
                                 ),
                               ),
@@ -132,7 +134,7 @@ class _DetailScreenState extends State<DetailScreen>
                                   children: [
                                     Icon(Icons.local_movies_rounded),
                                     SizedBox(width: 10),
-                                    Text('Movie'),
+                                    Text(MyConstants.detailsScreenMovieTab),
                                   ],
                                 ),
                               ),
@@ -170,8 +172,8 @@ Widget getConditionalImage(
       return CachedNetworkImage(
         key: ValueKey(comicImgLink),
         imageUrl: _imageUrlPrefix + comicImgLink,
-        placeholder: (context, url) => CircularProgressIndicator(),
-        errorWidget: (context, url, error) => Icon(Icons.error),
+        placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+        errorWidget: (context, url, error) => Center(child: Icon(Icons.error)),
         fit: BoxFit.cover,
       );
     }
@@ -180,17 +182,15 @@ Widget getConditionalImage(
       return CachedNetworkImage(
         key: ValueKey(movieImgLink),
         imageUrl: _imageUrlPrefix + movieImgLink,
-        placeholder: (context, url) => CircularProgressIndicator(),
-        errorWidget: (context, url, error) => Icon(Icons.error),
+        placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+        errorWidget: (context, url, error) => Center(child: Icon(Icons.error)),
         fit: BoxFit.cover,
       );
     }
   }
-  return Center(
+  return Container(
     key: UniqueKey(),
-    child: FlutterLogo(
-      size: 40,
-    ),
+    child: MarvelPlaceholder()
   );
 }
 

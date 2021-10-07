@@ -11,12 +11,39 @@ abstract class HeroBiographyRepository {
 }
 
 class RealHeroBiographyRepository implements HeroBiographyRepository {
+  final String collection = 'characterBio';
+  final String filter = 'link';
+  
   @override
   Future<HeroBio> fetchHeroBiography(HeroProfile hero) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     var querySnapshot = await firestore
-        .collection('characterBio')
-        .where('link', isEqualTo: hero.link)
+        .collection(collection)
+        .where(filter, isEqualTo: hero.link)
+        .get();
+
+    return Future(() {
+      // Since we are getting all of the character data from Marvel's website based on the character page's url,
+      // It should be safe to assume that there will only be one document with any given link
+      if (querySnapshot.docs.isNotEmpty) {
+        return HeroBio.fromJson(querySnapshot.docs[0].data());
+      }
+      throw EmptyBiographyException('no');
+    });
+  }
+}
+
+class EmulatedHeroBiographyRepository implements HeroBiographyRepository {
+  final String collection = 'characterBio';
+  final String filter = 'link';
+  
+  @override
+  Future<HeroBio> fetchHeroBiography(HeroProfile hero) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    firestore.useFirestoreEmulator('localhost', 8080);
+    var querySnapshot = await firestore
+        .collection(collection)
+        .where(filter, isEqualTo: hero.link)
         .get();
 
     return Future(() {
